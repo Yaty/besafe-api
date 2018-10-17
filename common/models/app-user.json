@@ -1,0 +1,45 @@
+{
+  "name": "AppUser",
+  "plural": "appusers",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "excludeBaseProperties": ["email", "emailVerified", "realm"],
+  "properties": {
+    "phone": {
+      "type": "string",
+      "required": true,
+      "id": true
+    },
+    "firstname": {
+      "type": "string",
+      "required": true
+    },
+    "lastname": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "alerts": {
+      "type": "hasMany",
+      "model": "Alert",
+      "foreignKey": ""
+    },
+    "locations": {
+      "type": "hasMany",
+      "model": "Location",
+      "foreignKey": ""
+    },
+    "responses": {
+      "type": "hasAndBelongsToMany",
+      "model": "Alert",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

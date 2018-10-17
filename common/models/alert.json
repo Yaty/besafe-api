@@ -1,0 +1,39 @@
+{
+  "name": "Alert",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "date": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "resolved": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "appUser": {
+      "type": "belongsTo",
+      "model": "AppUser",
+      "foreignKey": ""
+    },
+    "responders": {
+      "type": "hasAndBelongsToMany",
+      "model": "AppUser",
+      "foreignKey": ""
+    },
+    "location": {
+      "type": "hasOne",
+      "model": "Location",
+      "foreignKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
