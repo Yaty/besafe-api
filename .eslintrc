@@ -1,3 +1,6 @@
 {
-  "extends": "loopback"
+  "extends": "google",
+  "parserOptions": {
+    "ecmaVersion": 8
+  }
 }
