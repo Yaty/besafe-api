@@ -8,12 +8,17 @@
   "properties": {
     "date": {
       "type": "date",
-      "defaultFn": "now"
+      "defaultFn": "now",
+      "required": true
     },
     "resolved": {
       "type": "boolean",
       "required": true,
       "default": false
+    },
+    "location": {
+      "type": "geopoint",
+      "required": true
     }
   },
   "validations": [],
@@ -26,11 +31,6 @@
     "responders": {
       "type": "hasAndBelongsToMany",
       "model": "AppUser",
-      "foreignKey": ""
-    },
-    "location": {
-      "type": "hasOne",
-      "model": "Location",
       "foreignKey": ""
     }
   },

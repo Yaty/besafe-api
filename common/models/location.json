@@ -17,11 +17,6 @@
   },
   "validations": [],
   "relations": {
-    "alert": {
-      "type": "belongsTo",
-      "model": "Alert",
-      "foreignKey": ""
-    },
     "appUser": {
       "type": "belongsTo",
       "model": "AppUser",
