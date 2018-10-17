@@ -10,8 +10,7 @@
   "properties": {
     "phone": {
       "type": "string",
-      "required": true,
-      "id": true
+      "required": true
     },
     "firstname": {
       "type": "string",
@@ -40,6 +39,12 @@
       "foreignKey": ""
     }
   },
-  "acls": [],
+  "acls": [{
+    "principalType": "ROLE",
+    "principalId": "$owner",
+    "permission": "ALLOW",
+    "property": "__create__locations",
+    "accessType": "EXECUTE"
+  }],
   "methods": {}
 }

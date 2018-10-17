@@ -1,6 +1,8 @@
 'use strict';
 
 module.exports = function(AppUser) {
+  AppUser.validatesUniquenessOf('phone');
+
   AppUser.observe('before save', async function(ctx) {
     if (ctx.instance && ctx.instance.phone) {
       ctx.instance.username = ctx.instance.phone;
