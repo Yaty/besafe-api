@@ -19,6 +19,7 @@
     "loopback-component-explorer": "^6.3.0",
     "loopback-connector-mongodb": "^3.8.0",
     "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.1.1",
     "socketio-auth": "^0.1.1",
