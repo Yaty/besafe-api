@@ -26,6 +26,6 @@ boot(app, __dirname, function(err) {
   // start the server if `$ node server.js`
   if (require.main === module) {
     const server = app.start();
-    socketio(server, app);
+    socketio.init(server, app);
   }
 });

@@ -1,32 +1,48 @@
 const socketio = require('socket.io');
 const socketioAuth = require('socketio-auth');
 
-module.exports = function(server, app) {
-  const io = socketio(server);
+let io;
 
-  socketioAuth(io, {
-    authenticate(socket, value, callback) {
-      const AccessToken = app.models.AccessToken;
+module.exports = {
+  init(server, app) {
+    io = socketio(server);
 
-      AccessToken.findOne({
-        where: {
-          and: [{
-            userId: value.userId,
-          }, {
-            id: value.id,
-          }],
-        },
-      }, function(err, token) {
-        if (err) return callback(err);
-        callback(null, !!token);
-      });
-    },
-  });
+    socketioAuth(io, {
+      authenticate(socket, value, callback) {
+        const AccessToken = app.models.AccessToken;
 
-  io.on('connection', function(socket) {
-    console.log('a user connected');
-    socket.on('disconnect', function() {
-      console.log('user disconnected');
+        AccessToken.findOne({
+          where: {
+            and: [{
+              userId: value.userId,
+            }, {
+              id: value.id,
+            }],
+          },
+        }, function(err, token) {
+          if (err) return callback(err);
+          callback(null, !!token);
+          socket.appUserId = value.userId;
+        });
+      },
     });
-  });
+
+    io.on('connection', function(socket) {
+      console.log('New client', socket.id);
+      socket.on('disconnect', function() {
+        console.log('Disconnected client', socket.id);
+      });
+    });
+  },
+  alert(data) {
+    for (const client of io.sockets.clients()) {
+      const appUser = data.find((d) => d.id === client.appUserId);
+
+      if (!appUser) {
+        continue;
+      }
+
+      client.emit('alert', appUser.message);
+    }
+  },
 };
