@@ -57,18 +57,17 @@ module.exports = function(AppUser) {
       data.push({
         responseId: id,
         appUserId: responder.id,
-        msg:
-          'Alerte provenant de ' + ctx.instance.firstname +
-          ' qui est à ' +
-          Math.round(
-              loopback.GeoPoint.distanceBetween(
-                  responder.location,
-                  ctx.result.location,
-                  {
-                    type: 'meters',
-                  }
-              )
-          ) + ' mètres. Situé au : ' + address,
+        msg: 'Alerte provenant de ' + ctx.instance.firstname,
+        distance: Math.round(
+            loopback.GeoPoint.distanceBetween(
+                responder.location,
+                ctx.result.location,
+                {
+                  type: 'meters',
+                }
+            )
+        ),
+        address,
       });
     }
 
