@@ -46,27 +46,56 @@ module.exports = function(AppUser) {
     ]);
 
     const Responder = server.models.Responder;
-    await Promise.all(responders.map((responder) => Responder.create({
-      alertId: ctx.result.id,
-      appUserId: responder.id,
-    })));
+    const data = [];
 
-    const data = responders.map((user) => ({
-      appUserId: user.id,
-      msg:
-        'Alerte provenant de ' + ctx.instance.firstname +
-        ' qui est à ' +
-        Math.round(
-            loopback.GeoPoint.distanceBetween(
-                user.location,
-                ctx.result.location,
-                {
-                  type: 'meters',
-                }
-            )
-        ) + ' mètres. Situé au : ' + address,
-    }));
+    for (const responder of responders) {
+      const {id} = await Responder.create({
+        alertId: ctx.result.id,
+        appUserId: responder.id,
+      });
+
+      data.push({
+        responseId: id,
+        appUserId: responder.id,
+        msg:
+          'Alerte provenant de ' + ctx.instance.firstname +
+          ' qui est à ' +
+          Math.round(
+              loopback.GeoPoint.distanceBetween(
+                  responder.location,
+                  ctx.result.location,
+                  {
+                    type: 'meters',
+                  }
+              )
+          ) + ' mètres. Situé au : ' + address,
+      });
+    }
 
     io.alert(data);
+  });
+
+  AppUser.resolveAlert = async function(appUserId, responseId) {
+    const Responder = server.models.Responder;
+    const response = await Responder.findById(responseId);
+
+    if (!response) {
+      return;
+    }
+
+    await response.updateAttribute('helped', true);
+  };
+
+  AppUser.remoteMethod('resolveAlert', {
+    accepts: [{
+      arg: 'id',
+      type: 'string',
+      required: true,
+    }, {
+      arg: 'fk',
+      type: 'string',
+      required: true,
+    }],
+    http: {verb: 'post', path: '/:id/responses/:fk/resolve'},
   });
 };
