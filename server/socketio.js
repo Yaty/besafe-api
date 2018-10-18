@@ -62,8 +62,10 @@ module.exports = {
       console.log(clientSocket);
 
       if (clientSocket) { // Send
+        console.log('send');
         clientSocket.emit('alert', alert);
       } else { // Queue
+        console.log('queue');
         alertQueue.push(alert);
       }
     }
