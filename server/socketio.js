@@ -49,12 +49,17 @@ module.exports = {
     });
   },
   alert(data) {
+    console.log(data);
     const sockets = Object.values(io.sockets.sockets);
 
     for (const alert of data) {
       const clientSocket = sockets.find(
           (s) => s.appUserId === alert.appUserId
       );
+
+      console.log(alert);
+
+      console.log(clientSocket);
 
       if (clientSocket) { // Send
         clientSocket.emit('alert', alert);
