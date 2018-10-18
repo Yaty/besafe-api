@@ -26,6 +26,8 @@ module.exports = function(AppUser) {
         where: {
           location: {
             near: ctx.result.location || ctx.instance.location,
+            maxDistance: 1,
+            unit: 'kilometers',
           },
         },
       }),
