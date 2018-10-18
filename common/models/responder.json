@@ -1,18 +1,15 @@
 {
-  "name": "Location",
+  "name": "Responder",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "location": {
-      "type": "geopoint",
-      "required": true
-    },
-    "date": {
-      "type": "date",
-      "defaultFn": "now"
+    "helped": {
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   },
   "validations": [],
@@ -20,7 +17,12 @@
     "appUser": {
       "type": "belongsTo",
       "model": "AppUser",
-      "foreignKey": ""
+      "foreignKey": "appUserId"
+    },
+    "alert": {
+      "type": "belongsTo",
+      "model": "Alert",
+      "foreignKey": "alertId"
     }
   },
   "acls": [],

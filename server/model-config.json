@@ -47,7 +47,7 @@
     "dataSource": "mongodb",
     "public": false
   },
-  "Location": {
+  "Responder": {
     "dataSource": "mongodb",
     "public": false
   }

@@ -8,8 +8,8 @@
   "properties": {
     "date": {
       "type": "date",
-      "defaultFn": "now",
-      "required": true
+      "required": true,
+      "defaultFn": "now"
     },
     "resolved": {
       "type": "boolean",
@@ -17,8 +17,7 @@
       "default": false
     },
     "location": {
-      "type": "geopoint",
-      "required": true
+      "type": "geopoint"
     }
   },
   "validations": [],
@@ -29,9 +28,10 @@
       "foreignKey": ""
     },
     "responders": {
-      "type": "hasAndBelongsToMany",
+      "type": "hasMany",
       "model": "AppUser",
-      "foreignKey": ""
+      "foreignKey": "alertId",
+      "through": "Responder"
     }
   },
   "acls": [],

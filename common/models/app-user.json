@@ -6,7 +6,11 @@
   "options": {
     "validateUpsert": true
   },
-  "excludeBaseProperties": ["email", "emailVerified", "realm"],
+  "excludeBaseProperties": [
+    "email",
+    "emailVerified",
+    "realm"
+  ],
   "properties": {
     "phone": {
       "type": "string",
@@ -19,6 +23,9 @@
     "lastname": {
       "type": "string",
       "required": true
+    },
+    "location": {
+      "type": "geopoint"
     }
   },
   "validations": [],
@@ -28,29 +35,21 @@
       "model": "Alert",
       "foreignKey": ""
     },
-    "locations": {
-      "type": "hasMany",
-      "model": "Location",
-      "foreignKey": ""
-    },
     "responses": {
-      "type": "hasAndBelongsToMany",
+      "type": "hasMany",
       "model": "Alert",
-      "foreignKey": ""
+      "foreignKey": "appUserId",
+      "through": "Responder"
     }
   },
-  "acls": [{
-    "principalType": "ROLE",
-    "principalId": "$owner",
-    "permission": "ALLOW",
-    "property": "__create__locations",
-    "accessType": "EXECUTE"
-  }, {
-    "principalType": "ROLE",
-    "principalId": "$owner",
-    "permission": "ALLOW",
-    "property": "__create__alerts",
-    "accessType": "EXECUTE"
-  }],
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$owner",
+      "permission": "ALLOW",
+      "property": "__create__alerts"
+    }
+  ],
   "methods": {}
 }

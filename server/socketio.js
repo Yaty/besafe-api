@@ -2,6 +2,7 @@ const socketio = require('socket.io');
 const socketioAuth = require('socketio-auth');
 
 let io;
+const alertQueue = [];
 
 module.exports = {
   init(server, app) {
@@ -23,6 +24,17 @@ module.exports = {
           if (err) return callback(err);
           callback(null, !!token);
           socket.appUserId = value.userId;
+
+          let missedAlerts = 0;
+
+          for (let i = 0; i < alertQueue.length; i++) {
+            if (alertQueue[i].appUserId === socket.appUserId) {
+              missedAlerts++;
+              alertQueue.splice(i, 1);
+            }
+          }
+
+          socket.emit('missed-alerts', missedAlerts);
         });
       },
     });
@@ -35,14 +47,18 @@ module.exports = {
     });
   },
   alert(data) {
-    for (const client of io.sockets.clients()) {
-      const appUser = data.find((d) => d.id === client.appUserId);
+    const sockets = Object.values(io.sockets.sockets);
 
-      if (!appUser) {
-        continue;
+    for (const alert of data) {
+      const clientSocket = sockets.find(
+          (s) => s.appUserId === alert.appUserId
+      );
+
+      if (clientSocket) { // Send
+        clientSocket.emit('alert', alert.message);
+      } else { // Queue
+        alertQueue.push(alert);
       }
-
-      client.emit('alert', appUser.message);
     }
   },
 };
