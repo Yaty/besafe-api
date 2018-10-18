@@ -25,7 +25,7 @@ module.exports = function(AppUser) {
       AppUser.find({
         where: {
           location: {
-            near: ctx.result.location,
+            near: ctx.result.location || ctx.instance.location,
           },
         },
       }),
