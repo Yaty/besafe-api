@@ -5,6 +5,11 @@ const boot = require('loopback-boot');
 const socketio = require('./socketio');
 const app = module.exports = loopback();
 
+app.use(loopback.token({
+  model: app.models.accessToken,
+  currentUserLiteral: 'me'
+}));
+
 app.start = function() {
   // start the web server
   return app.listen(function() {
