@@ -3,6 +3,9 @@ const loopback = require('loopback');
 const map = require('../utils/map.js');
 const io = require('../../server/socketio');
 const server = require('../../server/server');
+const cpaas = require('../utils/cpaas');
+const {PhoneNumberFormat, PhoneNumberUtil} = require('google-libphonenumber');
+const phoneUtil = PhoneNumberUtil.getInstance();
 
 module.exports = function(AppUser) {
   AppUser.validatesUniquenessOf('phone');
@@ -46,7 +49,8 @@ module.exports = function(AppUser) {
     ]);
 
     const Responder = server.models.Responder;
-    const data = [];
+    const dataIO = [];
+    const dataCPaaS = [];
 
     for (const responder of responders) {
       const {id} = await Responder.create({
@@ -54,24 +58,41 @@ module.exports = function(AppUser) {
         appUserId: responder.id,
       });
 
-      data.push({
+      const distance = Math.round(
+          loopback.GeoPoint.distanceBetween(
+              responder.location,
+              ctx.result.location,
+              {
+                type: 'meters',
+              }
+          )
+      );
+
+      const msg = 'Alerte provenant de ' + ctx.instance.firstname;
+
+      dataIO.push({
         responseId: id,
         appUserId: responder.id,
-        msg: 'Alerte provenant de ' + ctx.instance.firstname,
-        distance: Math.round(
-            loopback.GeoPoint.distanceBetween(
-                responder.location,
-                ctx.result.location,
-                {
-                  type: 'meters',
-                }
-            )
-        ),
+        msg,
+        distance,
         address,
       });
+
+      try {
+        const parsedPhone = phoneUtil.parse(responder.phone, 'FR');
+        dataCPaaS.push({
+          phone: phoneUtil.format(parsedPhone, PhoneNumberFormat.E164),
+          msg:
+            'Ceci est une notification BeSafe ! \n' +
+            `${msg}. \nDistance : ${distance} mètres. \nAdresse : ${address}`,
+        });
+      } catch (err) {
+        console.log('Ignoring invalid phone', err, responder.phone);
+      }
     }
 
-    io.alert(data);
+    cpaas.alert(dataCPaaS);
+    io.alert(dataIO);
   });
 
   AppUser.resolveAlert = async function(appUserId, responseId) {
