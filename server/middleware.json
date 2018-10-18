@@ -1,6 +1,9 @@
 {
   "initial:before": {
-    "loopback#favicon": {}
+    "loopback#favicon": {},
+    "morgan": {
+      "params": "tiny"
+    }
   },
   "initial": {
     "compression": {},
