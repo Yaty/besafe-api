@@ -10,6 +10,7 @@ module.exports = {
 
     socketioAuth(io, {
       authenticate(socket, value, callback) {
+        console.log('Authenticating socket', value);
         const AccessToken = app.models.AccessToken;
 
         AccessToken.findOne({
@@ -22,6 +23,7 @@ module.exports = {
           },
         }, function(err, token) {
           if (err) return callback(err);
+          console.log('Authenticated : ', !!token);
           callback(null, !!token);
           socket.appUserId = value.userId;
 
