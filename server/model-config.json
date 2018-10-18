@@ -45,7 +45,7 @@
   },
   "Alert": {
     "dataSource": "mongodb",
-    "public": false
+    "public": true
   },
   "Responder": {
     "dataSource": "mongodb",
