@@ -23,7 +23,7 @@ module.exports = {
           },
         }, function(err, token) {
           if (err) return callback(err);
-          console.log('Authenticated : ', !!token);
+          console.log('Authenticated :', !!token);
           callback(null, !!token);
           socket.appUserId = value.userId;
 
@@ -49,7 +49,6 @@ module.exports = {
     });
   },
   alert(data) {
-    console.log(data);
     const sockets = Object.values(io.sockets.sockets);
 
     for (const alert of data) {
@@ -57,16 +56,12 @@ module.exports = {
           (s) => s.appUserId === alert.appUserId
       );
 
-      console.log(alert);
-
-      console.log(clientSocket);
-
       if (clientSocket) { // Send
-        console.log('send');
         clientSocket.emit('alert', alert);
+        console.log('Alert sent in IO');
       } else { // Queue
-        console.log('queue');
         alertQueue.push(alert);
+        console.log('Queued.');
       }
     }
   },
