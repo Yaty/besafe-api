@@ -79,10 +79,26 @@ module.exports = function(AppUser) {
     const Responder = server.models.Responder;
     const response = await Responder.findById(responseId);
 
-    if (!response) {
+    if (!response || response.helped) {
       return;
     }
 
+    const Alert = server.models.Alert;
+
+    const [responses, alert] = await Promise.all([
+      Responder.find({
+        where: {
+          and: [{
+            alertId: response.alertId,
+          }, {
+            helped: true,
+          }],
+        },
+      }),
+      Alert.findById(response.alertId),
+    ]);
+
+    io.newResponse(alert.appUserId, responses.length + 1);
     await response.updateAttribute('helped', true);
   };
 

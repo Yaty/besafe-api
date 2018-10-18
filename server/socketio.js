@@ -61,4 +61,15 @@ module.exports = {
       }
     }
   },
+  newResponse(appUserId, total) {
+    const clientSocket = Object.values(io.sockets.sockets).find(
+        (s) => s.appUserId === appUserId
+    );
+
+    if (!clientSocket) {
+      return;
+    }
+
+    clientSocket.emit('new-response', total);
+  },
 };
