@@ -7,7 +7,7 @@ const app = module.exports = loopback();
 
 app.use(loopback.token({
   model: app.models.accessToken,
-  currentUserLiteral: 'me'
+  currentUserLiteral: 'me',
 }));
 
 app.start = function() {
