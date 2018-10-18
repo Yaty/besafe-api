@@ -55,7 +55,7 @@ module.exports = {
       );
 
       if (clientSocket) { // Send
-        clientSocket.emit('alert', alert.message);
+        clientSocket.emit('alert', alert);
       } else { // Queue
         alertQueue.push(alert);
       }
