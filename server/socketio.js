@@ -25,7 +25,7 @@ module.exports = {
           if (err) return callback(err);
           console.log('Authenticated :', !!token);
           callback(null, !!token);
-          socket.appUserId = value.userId;
+          socket.appUserId = String(value.userId);
 
           let missedAlerts = 0;
 
@@ -55,7 +55,7 @@ module.exports = {
 
     for (const alert of data) {
       const clientSocket = sockets.find(
-          (s) => s.appUserId === alert.appUserId
+          (s) => String(s.appUserId) === String(alert.appUserId)
       );
 
       if (clientSocket) { // Send
@@ -69,9 +69,9 @@ module.exports = {
   },
   newResponse(appUserId, total) {
     const clientSocket = Object.values(io.sockets.sockets).find(
-        (s) => s.appUserId === appUserId
+        (s) => String(s.appUserId) === String(appUserId)
     );
-    
+
     console.log('NEW RESPONSE', appUserId, total);
     console.log(clientSocket);
 
