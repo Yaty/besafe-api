@@ -12,7 +12,7 @@ if (cpaas) {
     },
   }).then((body) => {
     token = body.id;
-  }).catch(console.error);
+  }).catch((err) => console.error(err.toJSON()));
 } else {
   console.log('cpaas config is missing');
 }
@@ -32,6 +32,6 @@ module.exports = {
       json: {
         data,
       },
-    }).catch(console.error);
+    }).catch((err) => console.error(err.toJSON()));
   },
 };
