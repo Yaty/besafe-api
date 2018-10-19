@@ -72,9 +72,6 @@ module.exports = {
         (s) => String(s.appUserId) === String(appUserId)
     );
 
-    console.log('NEW RESPONSE', appUserId, total);
-    console.log(clientSocket);
-
     if (!clientSocket) {
       return;
     }
