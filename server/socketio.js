@@ -71,6 +71,9 @@ module.exports = {
     const clientSocket = Object.values(io.sockets.sockets).find(
         (s) => s.appUserId === appUserId
     );
+    
+    console.log('NEW RESPONSE', appUserId, total);
+    console.log(clientSocket);
 
     if (!clientSocket) {
       return;
