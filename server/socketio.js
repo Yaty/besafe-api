@@ -36,7 +36,9 @@ module.exports = {
             }
           }
 
-          socket.emit('missed-alerts', missedAlerts);
+          if (missedAlerts > 0) {
+            socket.emit('missed-alerts', missedAlerts);
+          }
         });
       },
     });
